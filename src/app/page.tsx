@@ -148,12 +148,13 @@ export default function Home() {
             </div>
             <footer style={{
                 marginTop: "16px",
-                fontSize: "0.8em"
             }}>
                 Source code: <a
+                style={{
+                    textDecoration: "underline"
+                }}
                 title="azu/react-action-in-client-side-example: React 19: useActionState, useFormStatus, useOptimistic in Client Side"
-                href="https://github.com/azu/react-action-in-client-side-example/tree/main">azu/react-action-in-client-side-example:
-                React 19: useActionState, useFormStatus, useOptimistic in Client Side</a>
+                href="https://github.com/azu/react-action-in-client-side-example/">https://github.com/azu/react-action-in-client-side-example/</a>
             </footer>
         </div>
     )
