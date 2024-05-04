@@ -5,6 +5,8 @@
 - [useFormStatus – React](https://react.dev/reference/react-dom/hooks/useFormStatus)
 - [useOptimistic – React](https://react.dev/reference/react/useOptimistic)
 
+:memo: Use Next.js 14.3.0-canary.38.
+
 ## Demo
 
 - <https://azu.github.io/react-action-in-client-side-example/>
