@@ -100,10 +100,13 @@ const FormUseOptimistic = () => {
             if (!error.ok) {
                 return error;
             }
-            redirect("/finished", RedirectType.push);
+            // redirect to /finished without 3rd argument
+            // redirect("/finished", RedirectType.push);
             return null;
         },
-        null
+        null,
+        // redirect to /finished
+        "/finished"
     );
 
     return <div>
