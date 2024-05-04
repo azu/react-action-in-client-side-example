@@ -146,6 +146,12 @@ export default function Home() {
             <div>
                 <FormUseOptimistic/>
             </div>
+            <footer>
+                Source code: <a
+                title="azu/react-action-in-client-side-example: React 19: useActionState, useFormStatus, useOptimistic in Client Side"
+                href="https://github.com/azu/react-action-in-client-side-example/tree/main">azu/react-action-in-client-side-example:
+                React 19: useActionState, useFormStatus, useOptimistic in Client Side</a>
+            </footer>
         </div>
     )
 };
