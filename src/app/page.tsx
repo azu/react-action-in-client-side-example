@@ -134,7 +134,7 @@ export default function Home() {
             <div>
                 <SimpleUseActionState/>
             </div>
-            <h2>Submit And Redirect in Client Side</h2>
+            <h2>useActionState: Submit And Redirect in Client Side</h2>
             <div>
                 <FormYourName/>
             </div>
