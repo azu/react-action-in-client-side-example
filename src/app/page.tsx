@@ -1,5 +1,5 @@
 "use client";
-import { useActionState } from "react";
+import { useActionState, useOptimistic } from "react";
 import { redirect } from "next/navigation";
 import { useFormStatus } from "react-dom";
 import { RedirectType } from "next/dist/client/components/redirect";
@@ -90,6 +90,36 @@ function FormUseFormStatus() {
     );
 }
 
+const FormUseOptimistic = () => {
+    const [name, setName] = useOptimistic("name");
+    const [response, submitAction, isPending] = useActionState<ReturnResponse | null, FormData>(
+        async (_, formData) => {
+            const props = parseFormData(formData);
+            setName(props.name);
+            const error = await updateName(props)
+            if (!error.ok) {
+                return error;
+            }
+            redirect("/finished", RedirectType.push);
+            return null;
+        },
+        null
+    );
+
+    return <div>
+        <form action={submitAction}>
+            <p>
+                Current Name: {name}
+            </p>
+            <label>New Name:
+                <input type="text" name="name"/>
+            </label>
+            <button type="submit">Submit</button>
+            {isPending && <p>Submitting...</p>}
+            {response && <p>{response.message}</p>}
+        </form>
+    </div>
+}
 export default function Home() {
     return (
         <div style={{
@@ -111,6 +141,10 @@ export default function Home() {
             <h2>useFormStatus in Client Side</h2>
             <div>
                 <FormUseFormStatus/>
+            </div>
+            <h2>useOptimistic in Client Side</h2>
+            <div>
+                <FormUseOptimistic/>
             </div>
         </div>
     )
