@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "React 19: useActionState, useFormStatus, useOptimisti in Client side",
+  title: "React 19: useActionState, useFormStatus, useOptimistic in Client side",
   description: "React Form Action in Client side",
 };
 
