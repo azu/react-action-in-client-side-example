@@ -1,95 +1,117 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+import { useActionState } from "react";
+import { redirect } from "next/navigation";
+import { useFormStatus } from "react-dom";
+import { RedirectType } from "next/dist/client/components/redirect";
+
+async function increment(previousState: number, formData: FormData) {
+    return previousState + 1;
+}
+
+function SimpleUseActionState({}) {
+    const [state, formAction] = useActionState(increment, 0);
+    return (
+        <form>
+            {state}
+            <button formAction={formAction}>Increment</button>
+        </form>
+    )
+}
+
+type FormYourNameProps = {
+    name: string;
+}
+type ReturnResponse = {
+    ok: boolean;
+    message?: string;
+
+}
+
+async function updateName(props: FormYourNameProps): Promise<ReturnResponse> {
+    console.log(props)
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    if (props.name.length < 3) {
+        return {
+            ok: false,
+            message: "Name is too short"
+        };
+    }
+    return {
+        ok: true
+    };
+}
+
+const parseFormData = (formData: FormData) => {
+    const name = formData.get("name") as string;
+    return {
+        name,
+    };
+}
+
+function FormYourName() {
+    const [response, submitAction, isPending] = useActionState<ReturnResponse | null, FormData>(
+        async (_, formData) => {
+            const error = await updateName(parseFormData(formData))
+            if (!error.ok) {
+                return error;
+            }
+            redirect("/finished", RedirectType.push);
+            return null;
+        },
+        null
+    );
+
+    return (
+        <form action={submitAction}>
+            <input type="text" name="name"/>
+            <button type="submit" disabled={isPending}>Update</button>
+            {isPending && <p>Submitting...</p>}
+            {response && <p>{response.message}</p>}
+        </form>
+    );
+}
+
+function FormUseFormStatus() {
+    function Submit() {
+        const status = useFormStatus();
+        return <div>
+            <button disabled={status.pending}>Submit</button>
+            {status.pending && <p>Submitting...</p>}
+        </div>
+    }
+
+    const action = async () => {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+    return (
+        <form action={action}>
+            <Submit/>
+        </form>
+    );
+}
 
 export default function Home() {
-  return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    return (
+        <div style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "4px",
+            paddingInline: "16px",
+            margin: "auto",
+            maxWidth: "800px"
+        }}>
+            <h2>useActionState in Client Side</h2>
+            <div>
+                <SimpleUseActionState/>
+            </div>
+            <h2>Submit And Redirect in Client Side</h2>
+            <div>
+                <FormYourName/>
+            </div>
+            <h2>useFormStatus in Client Side</h2>
+            <div>
+                <FormUseFormStatus/>
+            </div>
         </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  );
-}
+    )
+};
