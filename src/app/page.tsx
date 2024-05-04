@@ -146,7 +146,10 @@ export default function Home() {
             <div>
                 <FormUseOptimistic/>
             </div>
-            <footer>
+            <footer style={{
+                marginTop: "16px",
+                fontSize: "0.8em"
+            }}>
                 Source code: <a
                 title="azu/react-action-in-client-side-example: React 19: useActionState, useFormStatus, useOptimistic in Client Side"
                 href="https://github.com/azu/react-action-in-client-side-example/tree/main">azu/react-action-in-client-side-example:
